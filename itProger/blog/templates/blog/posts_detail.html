@@ -1,0 +1,36 @@
+{% extends 'blog/main.html' %}
+{% block main_section %}
+    <div class="alert alert-light">
+        <a href="{% url 'blog-home' %}">Вернуться назад</a>
+        <h1>{{object.title}}</h1>
+        <p>{{object.text|safe}}</p>
+        <div class="row">
+            <div>
+                {%if object.avtor.profile.img %}
+                    <img src="{{ object.avtor.profile.img.url }}" alt="{{object.avtor }}" class="user_image">
+                {% else %}
+                    <img src="/media/default.jpg" alt="{{ object.avtor }}" class="user_image">
+                {% endif %}
+            </div>
+            <div>
+                <span class="text-muted">дата публикации:{{object.date|date:"d E Y H:i:s"}}</span>
+                <p><b>Автор:</b><a href="{% url 'user-posts' object.avtor %}">{{object.avtor}}</></p>
+            </div>
+        </div>
+        {% if object.avtor == user %}
+            <hr>
+            <a href="{% url 'posts-update' object.id %}" class="btn btn-info">Обновить пост</a>
+            <a href="{% url 'posts-delete' object.id %}" class="btn btn-danger">Удалить пост</a>
+        {% endif %}
+    </div>
+{% endblock main_section %}
+
+{% block aside_news_section %}
+<h3><b>Интересная информация</b></h3>
+<p>Небольшой городок в Рязанской области,где летом очень здорово)</p>
+<a href="https://ru.wikipedia.org/wiki/%D0%9D%D0%BE%D0%B2%D0%BE%D0%BC%D0%B8%D1%87%D1%83%D1%80%D0%B8%D0%BD%D1%81%D0%BA" target="_blank"><button class="btn btn-warning">Посмотреть подробнее</button>
+                   </a>
+ <div class="p-3 bm-3">
+                        <img src="https://i.ytimg.com/vi/X3PkGiKIpcA/maxresdefault.jpg" class="img-thumbnail">
+                   </div>
+{% endblock aside_news_section %}

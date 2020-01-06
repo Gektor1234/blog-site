@@ -1,0 +1,57 @@
+{% extends 'blog/main.html' %}
+{% block main_section %}
+    <h2>Все посты от автора {{ view.kwargs.username }} </h2>
+    <h4>Количество постов {{ page_obj.paginator.count }}</h4>
+    {% for i in news %}
+        <div class="alert alert-light">
+            <h1>{{i.title}}</h1>
+            <p>{{i.text|striptags|truncatechars:200 }}</p>
+            <div class="row">
+                <div>
+                    {%if i.avtor.profile.img %}
+                        <img src="{{ i.avtor.profile.img.url }}" alt="{{ i.avtor }}" class="user_image">
+                    {% else %}
+                        <img src="/media/default.jpg" alt="{{ i.avtor }}" class="user_image">
+                    {% endif %}
+                </div>
+                <div>
+                    <span class="text-nuted">дата публикации:{{i.date|date:"d E Y H:i:s"}}</span>
+                    <p><b>Автор:</b><a href="{% url 'user-posts' i.avtor %}">{{i.avtor}}</a></p>
+                </div>
+            </div>
+            <a href="{% url 'posts-detail' i.id %}" class="btn btn-outline-warning">Читать далее</a>
+        </div>
+    {% endfor %}
+
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="btn btn-outline-warning">В начало</a>
+            <a href="?page={{ page_obj.previous_page_number}}" class="btn btn-outline-warning">Предыдущая</a>
+        {% endif %}
+
+        {%  for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+                <button class="btn btn-warning">{{ num }}</button>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}" class="btn btn-outline-warning">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number}}" class="btn btn-outline-warning">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-warning">В конец</a>
+        {% endif %}
+    {% endif %}
+
+{% endblock main_section %}
+
+{% block aside_news_section %}
+<h3><b>Интересная информация</b></h3>
+<p>Небольшой городок в Рязанской области,где летом очень здорово)</p>
+<a href="https://ru.wikipedia.org/wiki/%D0%9D%D0%BE%D0%B2%D0%BE%D0%BC%D0%B8%D1%87%D1%83%D1%80%D0%B8%D0%BD%D1%81%D0%BA" targer="_blank"><button class="btn btn-warning">Посмотреть подробнее</button>
+                   </a>
+ <div class="p-3 bm-3">
+                        <img src="https://i.ytimg.com/vi/X3PkGiKIpcA/maxresdefault.jpg" class="img-thumbnail">
+                   </div>
+{% endblock aside_news_section %}
+
